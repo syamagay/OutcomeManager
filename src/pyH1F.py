@@ -63,15 +63,17 @@ class pyH1F:
             
             if self.value_list[bin_num] > self.value_max :
                 self.value_max=self.value_list[bin_num]
-    def Draw(self, option='hist', fname=''):
-        if len(self.value_name) > 0 :
+    def Draw(self, option='hist', fname='', value_sort_opt=True):
+        if len(self.value_name) > 0 and value_sort_opt :
             self.value_list, self.value_name = self.ValueSort(self.value_list, self.value_name)
         if not fname == '':
             fig = plt.figure()
-        
+        fig_text=''
         first_text = 'total entry = '+str(self.total_entry)
         if option == 'text' :
             print('=============== Result ======================')
+            print('total entry = ' +str(self.total_entry))
+            print('=============================================')
             for i_bin in range(0,self.bin):
                 text='Value = '
                 
@@ -103,7 +105,12 @@ class pyH1F:
             plt.xlabel(self.x_label)
             plt.ylabel(self.y_label)
 
-            plt.text(x_list[-1],self.value_max,'Total : '+str(self.total_entry)+'\n Integral : '+str(self.integral)+'\n Average : '+str(float(self.integral)/float(self.total_entry)),ha='right',va='top')
+            if len(self.value_name) > 0:
+                fig_text='Total : '+str(self.total_entry)
+            else :
+                fig_text='Total : '+str(self.total_entry)+'\n Integral : '+str(self.integral)+'\n Average : '+str(float(self.integral)/float(self.total_entry))
+
+            plt.text(x_list[-1],self.value_max,fig_text,ha='right',va='top')
             #print(x_list)
             #print(plotted_data)
 
